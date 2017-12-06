@@ -2,12 +2,14 @@ package br.com.fiap.entity;
 
 import java.io.Serializable;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
+import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
-import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.MapsId;
 import javax.persistence.Table;
 
 @Entity
@@ -16,24 +18,32 @@ public class Musica implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
-	@Id
-	@Column(name="TRILHA")
-	private int trilha;
-	@Column(name = "NOME", length = 50)
-	private String nome;
-	@ManyToOne(fetch=FetchType.LAZY) 
+	@EmbeddedId
+	private MusicaPK musicaPk;
+	@ManyToOne(cascade=CascadeType.ALL, fetch=FetchType.LAZY) 
+	@MapsId("idAlbum")
 	@JoinColumn(name="IDALBUM") 
 	private Album album;
+	@Column(name = "NOME", length = 50)
+	private String nome;
 	
 	public Musica() {
 		super();
 	}
 
-	public Musica(int trilha, String nome, Album album) {
+	public Musica(MusicaPK musicaPk, Album album, String nome) {
 		super();
-		this.trilha = trilha;
-		this.nome = nome;
+		this.musicaPk = musicaPk;
 		this.album = album;
+		this.nome = nome;
+	}
+
+	public MusicaPK getMusicaPk() {
+		return musicaPk;
+	}
+
+	public void setMusicaPk(MusicaPK musicaPk) {
+		this.musicaPk = musicaPk;
 	}
 
 	public String getNome() {
@@ -41,14 +51,6 @@ public class Musica implements Serializable {
 	}
 	public void setNome(String nome) {
 		this.nome = nome;
-	}
-
-	public int getTrilha() {
-		return trilha;
-	}
-
-	public void setTrilha(int trilha) {
-		this.trilha = trilha;
 	}
 
 	public Album getAlbum() {
@@ -61,7 +63,7 @@ public class Musica implements Serializable {
 
 	@Override
 	public String toString() {
-		return "Musica [trilha=" + trilha + ", nome=" + nome + "]";
+		return "Musica [trilha=" + musicaPk.getTrilha() + ", nome=" + nome + "]";
 	}
 
 }

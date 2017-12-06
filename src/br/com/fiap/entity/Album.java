@@ -29,7 +29,7 @@ public class Album implements Serializable {
 	private int id;
 	@Column(name = "NOME", length = 50)
 	private String nome;
-	@ManyToOne(fetch=FetchType.LAZY) 
+	@ManyToOne(cascade=CascadeType.ALL, fetch=FetchType.LAZY) 
 	@JoinColumn(name="IDCANTOR") 
 	private Cantor cantor;
 	@OneToMany(cascade=CascadeType.ALL,fetch=FetchType.LAZY,mappedBy="album") 
